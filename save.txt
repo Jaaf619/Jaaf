@@ -1,0 +1,1043 @@
+
+void save_player(Player* p_, bool on_exit) {
+	if (server_port != 17098) {
+		if (p_->growid == false or p_->tankIDName.empty() or p_->tankIDPass.empty() or server_port != main_port) return;
+	}
+	if (p_->auth_) return;
+	//saveall
+	struct tm newtime;
+	time_t now = time(0);
+	localtime_s(&newtime, &now);
+	json save_, achievements_ = json::array(), friends_ = json::array(), playmods_ = json::array();
+	if (p_->temp_password != p_->tankIDPass) p_->temp_password.clear();
+	save_["name"] = p_->tankIDName;
+	save_["temp_pass"] = p_->temp_password;
+	save_["n"] = p_->n;
+	save_["mod2"] = p_->moderator;
+	save_["dev"] = p_->dev;
+	save_["superdev"] = p_->superdev;
+	save_["m_h"] = p_->m_h;
+	save_["cc"] = p_->cc;
+	save_["opc"] = p_->opc;
+	save_["7bans"] = p_->bans;
+	save_["w_w"] = p_->w_w;
+	save_["mer"] = p_->mercy;
+	save_["rtg"] = p_->real_growtopia_name;
+	save_["drtt"] = p_->drtitle;
+	save_["drll"] = p_->drlegend;
+	save_["_drt"] = p_->drt;
+	save_["dnr"] = p_->donor;
+	save_["mst"] = p_->master;
+	save_["al"] = p_->all_in;
+	save_["mlb"] = p_->mailbox;
+	save_["ccd"] = p_->total_credit_card;
+	save_["ccd2"] = p_->credit_card;
+	save_["radio2"] = p_->radio2;
+	save_["owner"] = p_->ownership_role;
+	save_["/buy"] = p_->buy_role;
+	save_["/ghost"] = p_->ghost_role;
+	save_["/nick"] = p_->nick_role;
+	save_["/give"] = p_->give_role;
+	save_["/edit"] = p_->give_editor;
+	save_["cry"] = p_->crypto;
+	save_["participated"] = p_->participated;
+	save_["ig"] = p_->ignored;
+	save_["lr"] = p_->last_rated;
+	save_["sc"] = p_->skin_c;
+	save_["as"] = p_->autofarm_slot;
+	save_["playtime_items"] = p_->playtime_items;
+	save_["tmod"] = p_->tmod;
+	save_["bc"] = p_->black_color;
+	//save_["blabo"] = p_->black_box_consumed;
+	save_["on"] = p_->p_status;
+		// Crown of Season
+	save_["Aura_Season"] = p_->Aura_Season;
+	save_["Trail_Season"] = p_->Trail_Season;
+
+	// Banner Bandolier
+	save_["Banner_Item"] = p_->Banner_Item;
+	save_["Banner_Flag"] = p_->Banner_Flag;
+
+
+	save_["p_d1"] = p_->pinata_day;
+	save_["p_d2"] = p_->pinata_prize;
+	save_["p_d3"] = p_->pinata_claimed;
+	// Infinity Crown
+	save_["Crown_Time_Change"] = p_->Crown_Time_Change;
+	save_["Crown_Cycle_Time"] = p_->Crown_Cycle_Time;
+	save_["Base_R_0"] = p_->Base_R_0;
+	save_["Base_G_0"] = p_->Base_G_0;
+	save_["Base_B_0"] = p_->Base_B_0;
+	save_["Gem_R_0"] = p_->Gem_R_0;
+	save_["Gem_G_0"] = p_->Gem_G_0;
+	save_["Gem_B_0"] = p_->Gem_B_0;
+	save_["Crystal_R_0"] = p_->Crystal_R_0;
+	save_["Crystal_G_0"] = p_->Crystal_G_0;
+	save_["Crystal_B_0"] = p_->Crystal_B_0;
+	save_["Crown_Floating_Effect_0"] = p_->Crown_Floating_Effect_0;
+	save_["Crown_Laser_Beam_0"] = p_->Crown_Laser_Beam_0;
+	save_["Crown_Crystals_0"] = p_->Crown_Crystals_0;
+	save_["Crown_Rays_0"] = p_->Crown_Rays_0;
+	save_["Base_R_1"] = p_->Base_R_1;
+	save_["Base_G_1"] = p_->Base_G_1;
+	save_["Base_B_1"] = p_->Base_B_1;
+	save_["Gem_R_1"] = p_->Gem_R_1;
+	save_["Gem_G_1"] = p_->Gem_G_1;
+	save_["Gem_B_1"] = p_->Gem_B_1;
+	save_["Crystal_R_1"] = p_->Crystal_R_1;
+	save_["Crystal_G_1"] = p_->Crystal_G_1;
+	save_["Crystal_B_1"] = p_->Crystal_B_1;
+	save_["Crown_Floating_Effect_1"] = p_->Crown_Floating_Effect_1;
+	save_["Crown_Laser_Beam_1"] = p_->Crown_Laser_Beam_1;
+	save_["Crown_Crystals_1"] = p_->Crown_Crystals_1;
+	save_["Crown_Rays_1"] = p_->Crown_Rays_1;
+	save_["Crown_Value"] = p_->Crown_Value;
+	save_["Crown_Value_0_0"] = p_->Crown_Value_0_0;
+	save_["Crown_Value_0_1"] = p_->Crown_Value_0_1;
+	save_["Crown_Value_0_2"] = p_->Crown_Value_0_2;
+	save_["Crown_Value_1_0"] = p_->Crown_Value_1_0;
+	save_["Crown_Value_1_1"] = p_->Crown_Value_1_1;
+	save_["Crown_Value_1_2"] = p_->Crown_Value_1_2;
+	// Crown of Season
+
+	save_["cheater"] = p_->cheater_;
+	save_["c_s"] = p_->cheater_settings;
+	save_["support101"] = p_->support101_;
+	save_["logger"] = p_->logger;
+
+	save_["egg"] = p_->egg_carton;
+	save_["egg2"] = p_->magic_egg;
+	save_["h1"] = p_->won_hider;
+	save_["h2"] = p_->won_seeker;
+
+	// Magic Magnet
+	save_["mg"] = p_->Magnet_Item;
+	save_["g_a_b"] = p_->grow_air_ballon;
+	// Carnival Quest
+	save_["ca_c"] = p_->carnival_credit;
+	save_["CQuest"] = p_->C_QuestActive;
+	save_["CQItem"] = p_->C_DeliverID;
+	save_["CQProg"] = p_->C_QuestProgress;
+	save_["CQKind"] = p_->C_QuestKind;
+	save_["CQNeed"] = p_->C_ProgressNeeded;
+	save_["CQStep"] = p_->C_QuestStep;
+
+	save_["balloon_prize"] = p_->received_balloon_warz;
+
+	save_["ch_55"] = p_->chat_prefix;
+
+
+	save_["grm"] = p_->growmoji;
+	save_["12640"] = p_->minokawa_wings;
+	save_["12872"] = p_->panda_spirit;
+	save_["11506"] = p_->mask_dragon;
+	save_["7384"] = p_->growformer;
+	save_["12634"] = p_->eq_aura;
+
+	save_["gender"] = p_->gender;
+
+	save_["bb_1"] = p_->balloon_faction;
+	save_["bb_2"] = p_->balloon_hit;
+	save_["bb_3"] = p_->hit_by;
+	save_["bb_4"] = p_->balloon_donated;
+	save_["bb_5"] = p_->balloon_score;
+
+	save_["lw_1"] = p_->lwiz_quest;
+	save_["lw_2"] = p_->lwiz_step;
+	save_["lw_3"] = p_->lwiz_notification;
+	save_["lw_4"] = p_->legendary_quest;
+	save_["set"] = p_->set;
+	save_["is_legend"] = p_->is_legend;
+
+
+	/*
+	save_["w_t_d"] = p_->winterfest_task_day;
+	save_["w_t_w"] = p_->winterfest_wishes;
+	save_["w_t_q1"] = p_->winterfest_quest_1;
+	save_["w_t_q2"] = p_->winterfest_quest_2;
+	save_["w_t_q3"] = p_->winterfest_quest_3;
+
+	save_["w_t_rq1"] = p_->reset_winterfest_quest_1;
+	save_["w_t_rq2"] = p_->reset_winterfest_quest_2;
+	save_["w_t_rq3"] = p_->reset_winterfest_quest_3;
+	save_["w_t_rq4"] = p_->reset_winterfest_quest_4;
+	save_["w_t_rq5"] = p_->reset_winterfest_quest_5;
+	save_["w_t_rq6"] = p_->reset_winterfest_quest_6;
+	save_["w_t_rq7"] = p_->reset_winterfest_quest_7;
+	save_["w_t_rq8"] = p_->reset_winterfest_quest_8;
+	save_["w_t_st"] = p_->winterfest_stuff4toys;
+	save_["got_4292"] = p_->got_4292;
+	save_["got_4286"] = p_->got_4286;
+	save_["got_4288"] = p_->got_4288;
+	save_["got_10500"] = p_->got_10500;*/
+
+	save_["ri_1"] = p_->cape_t;
+	save_["ri_2"] = p_->cape_c;
+	save_["ri_3"] = p_->cape_t2;
+	save_["ri_4"] = p_->cape_c2;
+	save_["ri_5"] = p_->flags;
+	save_["ri_6"] = p_->TimeDilation;
+	save_["ri_7"] = p_->CapeStyleColor_1;
+	save_["ri_8"] = p_->CapeStyleColor_2;
+	save_["ri_9"] = p_->CapeCollarColor_1;
+	save_["ri_10"] = p_->CapeCollarColor_2;
+
+	save_["rw_1"] = p_->wings_t;
+	save_["rw_2"] = p_->wings_c;
+	save_["rw_3"] = p_->wings_t2;
+	save_["rw_4"] = p_->wings_c2;
+	save_["rw_5"] = p_->_flags;
+	save_["rw_6"] = p_->_TimeDilation;
+	save_["rw_7"] = p_->_CapeStyleColor_1;
+	save_["rw_8"] = p_->_CapeStyleColor_2;
+	save_["rw_9"] = p_->_CapeCollarColor_1;
+	save_["rw_10"] = p_->_CapeCollarColor_2;
+
+	/*
+	save_["h_1"] = p_->halloween_task_1;
+	save_["h_2"] = p_->halloween_task_2;
+	save_["h_3"] = p_->halloween_task_3;
+	save_["h_4"] = p_->halloween_task_4;
+
+	save_[to_string(halloween_quest) + "1"] = p_->halloween_ptask_1;
+	save_[to_string(halloween_quest) + "2"] = p_->halloween_ptask_2;
+	save_[to_string(halloween_quest) + "3"] = p_->halloween_ptask_3;
+	save_[to_string(halloween_quest) + "4"] = p_->halloween_ptask_4;
+	save_[to_string(halloween_quest) + "5"] = p_->halloween_ptask_5;*/
+
+	/*
+	save_["p_d1"] = p_->pinata_day;
+	save_["p_d2"] = p_->pinata_prize;
+	save_["p_d3"] = p_->pinata_claimed;
+	*/
+	save_["p_7"] = p_->pure_shadow;
+	save_["gr_w"] = p_->growtoken_worlds;
+	save_["g4g_7"] = p_->grow4good_gems;
+	save_["g4g_9"] = p_->grow4good_surgery;
+	save_["g4g_10"] = p_->grow4good_fish;
+	save_["g4g_11"] = p_->grow4good_points;
+	save_["g4g_12"] = p_->grow4good_30mins;
+	save_["g4g_14"] = p_->grow4good_break;
+	save_["g4g_15"] = p_->grow4good_place;
+	save_["g4g_16"] = p_->grow4good_trade;
+	save_["g4g_17"] = p_->grow4good_sb;
+	save_["g4g_18"] = p_->grow4good_enter;
+	save_["g4g_19"] = p_->grow4good_provider;
+	save_["g4g_20"] = p_->grow4good_provider2;
+	save_["g4g_21"] = p_->grow4good_geiger;
+	save_["g4g_22"] = p_->grow4good_geiger2;
+	save_["g4g_23_2023"] = p_->grow4good_week;
+	save_["g4g_24"] = p_->grow4good_seed;
+	save_["g4g_25"] = p_->grow4good_seed2;
+	save_["g4g_26"] = p_->grow4good_combine;
+	save_["g4g_27_2023"] = p_->grow4good_month;
+	save_["g4g_28"] = p_->grow4good_crystal;
+	save_["g4g_29"] = p_->grow4good_honors;
+
+	save_["2fa"] = p_->fa2;
+
+	//save_["garuda"] = p_->garuda;
+
+
+	save_["p_1"] = p_->display_age;
+	save_["p_2"] = p_->display_home;
+
+	save_["fire"] = p_->fires;
+
+	//save_["cnv_1"] = p_->carnival_credit;
+
+	save_["bea_1"] = p_->pearl;
+
+	save_["spr"] = p_->sprite;
+
+	save_["spr2"] = p_->wild;
+	save_["spr3"] = p_->golem;
+
+	save_["p1_1"] = p_->total_pineapple;
+	//save_["p1_2"] = p_->stage_pineapple;
+
+
+	//save_["smp"] = p_->halloween_dark_king;
+
+
+	save_["lvl125"] = p_->lvl125;
+	save_["rad"] = p_->radio;
+	save_["skl"] = p_->surgery_skill;
+	save_["sgt"] = p_->surgery_type;
+	save_["sd"] = p_->surgery_done;
+	save_["su1"] = p_->su_8552_1;
+	save_["su2"] = p_->su_8552_2;
+	save_["su3"] = p_->su_8552_3;
+	//save_["egg"] = p_->egg;
+	save_["glo"] = p_->glo;
+	save_["b_t"] = p_->b_t;
+	save_["b_b"] = p_->b_b;
+	save_["dd"] = p_->dd;
+	save_["lo"] = to_string(newtime.tm_mon + 1) + "/" + to_string(today_day) + "/" + to_string(1900 + newtime.tm_year) + " " + to_string(newtime.tm_hour) + ":" + (newtime.tm_min < 10 ? "0" + to_string(newtime.tm_min) + "" : "" + to_string(newtime.tm_min)) + ":" + to_string(newtime.tm_sec);
+	save_["ip"] = p_->ip;
+	save_["fa_ip"] = p_->fa_ip;
+	save_["b_s"] = p_->b_s;
+	save_["b_r"] = p_->b_r;
+	save_["b_ra"] = p_->b_ra;
+	save_["i_11818_1"] = p_->i_11818_1;
+	save_["i_11818_2"] = p_->i_11818_2;
+	save_["e_1"] = p_->hair_color;
+	save_["e_2"] = p_->eye_drop;
+	save_["e_3"] = p_->eye_lenses;
+	save_["b_lvl"] = p_->b_lvl;
+	save_["b_i"] = p_->b_i;
+	save_["b_bill"] = p_->b_bill;
+	save_["myou"] = p_->mini_you;
+	save_["b_w"] = p_->b_w;
+	save_["b_p"] = p_->b_p;
+	save_["m_b"] = p_->m_b;
+	save_["note"] = p_->note;
+	save_["supp"] = p_->supp;
+	save_["hs"] = p_->hs;
+	save_["bb"] = p_->bb;
+	save_["gtwl"] = p_->gtwl;
+	save_["rb"] = p_->rb;
+	save_["mds"] = p_->mds;
+	save_["gp"] = p_->gp;
+	save_["gd"] = p_->gd;
+	save_["glo_p"] = p_->glo_p;
+	save_["surg_p"] = p_->surg_p;
+	save_["t_p"] = p_->t_p;
+	save_["bb_p"] = p_->bb_p;
+	save_["ff_p"] = p_->ff_p;
+	save_["p_p"] = p_->p_p;
+	save_["g_p"] = p_->g_p;
+	save_["t_xp"] = p_->t_xp;
+	save_["bb_xp"] = p_->bb_xp;
+	save_["ff_xp"] = p_->ff_xp;
+	save_["s_xp"] = p_->s_xp;
+	save_["g_xp"] = p_->g_xp;
+	save_["p_xp"] = p_->p_xp;
+	save_["t_lvl"] = p_->t_lvl;
+	save_["bb_lvl"] = p_->bb_lvl;
+	save_["ff_lvl"] = p_->ff_lvl;
+	save_["g_lvl"] = p_->g_lvl;
+	save_["p_lvl"] = p_->p_lvl;
+	save_["s_lvl"] = p_->s_lvl;
+	save_["b_l"] = p_->b_l;
+	save_["bp"] = p_->bp;
+	save_["flagmay"] = p_->flagmay;
+	save_["pass"] = p_->tankIDPass, save_["email"] = p_->email;
+	save_["gems"] = p_->gems;
+	save_["vou"] = p_->voucher;
+	save_["punch"] = p_->punch_count;
+	save_["home_world"] = p_->home_world;
+	save_["show_location"] = p_->show_location_;
+	save_["show_notifications"] = p_->show_friend_notifications_;
+	save_["xp"] = p_->xp;
+	save_["d_name"] = p_->d_name;
+	save_["level"] = p_->level;
+	save_["skin"] = p_->skin;
+	save_["geiger"] = p_->geiger_;
+	save_["ghost"] = p_->ghost;
+	save_["invis"] = p_->invis;
+	save_["date"] = p_->account_created;
+	save_["booty_broken"] = p_->booty_broken;
+	save_["playtime"] = p_->seconds + (time(NULL) - p_->playtime);
+	save_[guild_name_player] = p_->guild_id;
+	save_["legend"] = p_->is_legend;
+	save_["roleSkin"] = p_->roleSkin;
+	save_["roleIcon"] = p_->roleIcon;
+	save_["mac"] = p_->mac;
+	save_["rid"] = p_->rid;
+	save_["vid"] = p_->vid;
+	/*
+	for (int i_ = 0; i_ < (p_->inv.size() > 496 ? 497 : p_->inv.size()); i_++) {
+		json item_;
+		item_["i"] = p_->inv[i_].id;
+		item_["c"] = p_->inv[i_].count;
+		inv_.push_back(item_);
+	}*/
+	/*
+	for (it = p_->achievements.begin(); it != p_->achievements.end(); it++) {
+		json achievement_;
+		achievement_["title"] = it->first;
+		achievement_["progress"] = it->second;
+		achievements_.push_back(achievement_);
+	} */
+	for (int i_ = 0; i_ < p_->friends.size(); i_++) {
+		json friend_;
+		friend_["name"] = p_->friends[i_].name;
+		friend_["mute"] = p_->friends[i_].mute;
+		friend_["block_trade"] = p_->friends[i_].block_trade;
+		friend_["last_seen"] = p_->friends[i_].last_seen;
+		friends_.push_back(friend_);
+	}
+	for (int i_ = 0; i_ < p_->playmods.size(); i_++) {
+		json playmod_;
+		playmod_["id"] = p_->playmods[i_].id;
+		playmod_["time"] = p_->playmods[i_].time;
+		playmod_["user"] = p_->playmods[i_].user;
+		playmods_.push_back(playmod_);
+	}
+	json blarneys_ = json::array();
+	for (int i_ = 0; i_ < p_->completed_blarneys.size(); i_++) {
+		json blarney_;
+		blarney_["world"] = p_->completed_blarneys[i_][0];
+		blarney_["time"] = p_->completed_blarneys[i_][1];
+		blarneys_.push_back(blarney_);
+	}
+	save_["blarney"] = blarneys_;
+	save_["playmods"] = playmods_;
+	save_["worlds_owned"] = p_->worlds_owned;
+	save_["ch"] = p_->crypto_history;
+	save_["la_wo"] = p_->last_visited_worlds;
+	save_["t_h"] = p_->trade_history;
+	save_["inventory"] = p_->inv;
+	save_["trans"] = p_->transmute;
+	save_["achievements"] = achievements_;
+	save_["friends"] = friends_;
+	save_["hair"] = p_->hair, save_["shirt"] = p_->shirt, save_["pants"] = p_->pants, save_["feet"] = p_->feet, save_["face"] = p_->face, save_["hand"] = p_->hand, save_["back"] = p_->back, save_["mask"] = p_->mask, save_["necklace"] = p_->necklace, save_["ances"] = p_->ances;
+	ofstream w_("players/" + p_->tankIDName + "_.json");
+	if (w_.fail()) {
+		cout << "failed to save player " << p_->tankIDName << endl;
+		return;
+	}
+	w_ << save_ << endl;
+	w_.close();
+	{
+		if (on_exit) {
+			uint32_t guild_id = p_->guild_id;
+			if (p_->guild_id != 0) {
+				vector<Guild>::iterator p = find_if(guilds.begin(), guilds.end(), [guild_id](const Guild& a) { return a.guild_id == guild_id; });
+				if (p != guilds.end()) {
+					Guild* guild_information = &guilds[p - guilds.begin()];
+					for (int i_ = 0; i_ < guild_information->guild_members.size(); i_++) {
+						GuildMember* edit_member = &guild_information->guild_members[i_];
+						if (to_lower(edit_member->member_name) == to_lower(p_->tankIDName)) {
+							edit_member->last_online = time(NULL);
+							break;
+						}
+					}
+				}
+			}
+			{
+				vector<string> friends_;
+				gamepacket_t p, p_g;
+				p.Insert("OnConsoleMessage"), p.Insert("`3FRIEND ALERT:`` " + p_->tankIDName + " has `4logged off``.");
+				p_g.Insert("OnConsoleMessage"), p_g.Insert("`5[GUILD ALERT]`` " + p_->tankIDName + " has `4logged off``.");
+				string t_ = "action|play_sfx\nfile|audio/friend_logoff.wav\ndelayMS|0";
+				BYTE* const d_ = new BYTE[5 + t_.length()];
+				*(__int8*)(d_) = 3;
+				memcpy(d_ + 4, t_.c_str(), t_.length());
+				*(__int8*)(d_ + 4 + t_.length()) = 0;
+				ENetPacket* const p_m = enet_packet_create(d_, 5 + t_.length(), ENET_PACKET_FLAG_RELIABLE);
+				for (int c_ = 0; c_ < p_->friends.size(); c_++) friends_.push_back(to_lower(p_->friends[c_].name));
+				for (ENetPeer* currentPeer = server->peers; currentPeer < &server->peers[server->peerCount]; ++currentPeer) {
+					if (currentPeer->state != ENET_PEER_STATE_CONNECTED or currentPeer->data == NULL or pInfo(currentPeer)->temp_radio) continue;
+					if (p_->guild_id != 0) {
+						if (p_->guild_id == pInfo(currentPeer)->guild_id) p_g.CreatePacket(currentPeer);
+					}
+					if (find(friends_.begin(), friends_.end(), to_lower(pInfo(currentPeer)->tankIDName)) != friends_.end()) {
+						for (int d_ = 0; d_ < pInfo(currentPeer)->friends.size(); d_++) {
+							if (to_lower(pInfo(currentPeer)->friends[d_].name) == to_lower(p_->tankIDName)) {
+								pInfo(currentPeer)->friends[d_].last_seen = time(NULL);
+								break;
+							}
+						}
+						if (not p_->invis and not p_->m_h) {
+							if (pInfo(currentPeer)->show_friend_notifications_) {
+								enet_peer_send(currentPeer, 0, p_m);
+								 p.CreatePacket(currentPeer);
+							}
+						}
+					}
+				}
+				delete[]d_;
+			}
+		}
+	}
+}
+
+
+
+
+int auth_(ENetPeer* peer) {
+	Player* p_ = pInfo(peer);
+	if (p_->tankIDName.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890") != std::string::npos) return -1;
+	string path_ = "players/" + p_->tankIDName + "_.json";
+	if (_access_s(path_.c_str(), 0) == 0) {
+		json r_;
+		ifstream f_(path_, ifstream::binary);
+		if (f_.fail()) return -1;
+		f_ >> r_;
+		f_.close();
+		try {
+			p_->temp_password = (!(r_.find("temp_pass") != r_.end()) ? p_->temp_password : r_["temp_pass"].get<string>());
+			if (not p_->temp_password.empty() && p_->temp_password == p_->tankIDPass) {
+			}
+			else if (p_->tankIDPass != r_["pass"]) return -1;
+			bool return_shit = false;
+			if (server_port == main_port) {
+				for (ENetPeer* currentPeer = server->peers; currentPeer < &server->peers[server->peerCount]; ++currentPeer) {
+					if (currentPeer->data == NULL) continue;
+					if (to_lower(pInfo(currentPeer)->tankIDName) == to_lower(p_->tankIDName)) {
+						if (pInfo(currentPeer)->id != pInfo(peer)->id) {
+							gamepacket_t p;
+							p.Insert("OnConsoleMessage"), p.Insert("`4ALREADY ON?! `o: This account was already online, kicking it off so you can log on. (if you were just playing before, this is nothing to worry about)"), p.CreatePacket(peer), p.CreatePacket(currentPeer);
+							peer->data = currentPeer->data;
+							enet_peer_disconnect_later(currentPeer, 0);
+							enet_peer_disconnect_later(peer, 0);
+							return_shit = true;
+						}
+					}
+				}
+			}
+			if (return_shit == true) return -2;
+			p_->growid = true;
+			json c_ = r_["friends"].get<json>();
+
+			p_->inv = r_["inventory"].get<vector<pair<int, int>>>();
+
+			//json b_ = r_["achievements"].get<json>()
+			/*for (int i_ = 0; i_ < b_.size(); i_++) {
+				p_->achievements.insert({ b_[i_]["title"].get<string>(), b_[i_]["progress"].get<int>() });
+			}*/
+			for (int i_ = 0; i_ < c_.size(); i_++) {
+				Friends new_friend_;
+				new_friend_.name = c_[i_]["name"].get<string>();
+				new_friend_.mute = c_[i_]["mute"].get<bool>();
+				new_friend_.block_trade = c_[i_]["block_trade"].get<bool>();
+				new_friend_.last_seen = c_[i_]["last_seen"].get<long long>();
+				p_->friends.push_back(new_friend_);
+			}
+			p_->worlds_owned = r_["worlds_owned"].get<vector<string>>();
+			p_->last_visited_worlds = r_["la_wo"].get<vector<string>>();
+			p_->is_legend = r_["legend"].get<bool>();
+			p_->bb = r_["bb"].get<bool>();
+
+			p_->pinata_day = (!(r_.find("p_d1") != r_.end()) ? p_->pinata_day : r_["p_d1"].get<int>());
+			p_->pinata_prize = (!(r_.find("p_d2") != r_.end()) ? p_->pinata_prize : r_["p_d2"].get<bool>());
+			p_->pinata_claimed = (!(r_.find("p_d3") != r_.end()) ? p_->pinata_claimed : r_["p_d3"].get<bool>());
+
+			p_->trade_history = r_["t_h"].get<vector<string>>();
+			p_->total_pineapple = r_["p1_1"].get<uint32_t>();
+			//p_->stage_pineapple = (!(r_.find("p1_2") != r_.end()) ? 0 : r_["p1_2"].get<uint16_t>());
+			p_->dd = r_["dd"].get<uint8_t>();
+			p_->supp = r_["supp"].get<uint8_t>();
+			p_->hs = r_["hs"].get<uint8_t>();
+			p_->note = r_["note"].get<string>();
+			p_->d_name = r_["d_name"].get<string>();
+			p_->gtwl = r_["gtwl"].get<int>();
+			p_->rb = r_["rb"].get<uint8_t>();
+			p_->mds = r_["mds"].get<uint8_t>();
+			p_->gp = r_["gp"].get<uint8_t>();
+			p_->gd = r_["gd"].get<uint8_t>();
+			p_->glo = r_["glo"].get<uint8_t>();
+			p_->glo_p = r_["glo_p"].get<vector<int>>();
+			p_->tankIDPass = r_["pass"].get<string>();
+			p_->last_online = r_["lo"].get<string>();
+			p_->surg_p = r_["surg_p"].get<vector<uint8_t>>();
+			p_->t_p = r_["t_p"].get<vector<uint8_t>>();
+			p_->bb_p = r_["bb_p"].get<vector<uint8_t>>();
+			p_->ff_p = r_["ff_p"].get<vector<uint8_t>>();
+			p_->p_p = r_["p_p"].get<vector<uint8_t>>();
+			p_->g_p = r_["g_p"].get<vector<uint8_t>>();
+			p_->t_xp = r_["t_xp"].get<int>();
+			p_->bb_xp = r_["bb_xp"].get<int>();
+			p_->ff_xp = r_["ff_xp"].get<int>();
+			p_->s_xp = r_["s_xp"].get<int>();
+			p_->g_xp = r_["g_xp"].get<int>();
+			p_->p_xp = r_["p_xp"].get<int>();
+			p_->t_lvl = r_["t_lvl"].get<uint8_t>();
+			p_->bb_lvl = r_["bb_lvl"].get<uint8_t>();
+			p_->ff_lvl = r_["ff_lvl"].get<uint8_t>();
+			p_->s_lvl = r_["s_lvl"].get<uint8_t>();
+			p_->g_lvl = r_["g_lvl"].get<uint8_t>();
+			p_->p_lvl = r_["p_lvl"].get<uint8_t>();
+			p_->b_l = r_["b_l"].get<uint16_t>();
+			p_->bp = r_["bp"].get<vector<pair<uint16_t, uint8_t>>>();
+			p_->flagmay = r_["flagmay"].get<int>();
+			p_->cc = r_["cc"].get<int>();
+			p_->opc = r_["opc"].get<uint16_t>();
+			p_->superdev = r_["superdev"].get<uint8_t>();
+			p_->b_i = r_["b_i"].get<int>();
+			p_->b_bill = r_["b_bill"].get<string>();
+			p_->b_w = r_["b_w"].get<int>();
+			p_->b_p = r_["b_p"].get<int>();
+			p_->surgery_skill = r_["skl"].get<uint8_t>();
+			p_->surgery_type = r_["sgt"].get<uint8_t>();
+			p_->surgery_done = r_["sd"].get<uint16_t>();
+			p_->b_ra = r_["b_ra"].get<int>();
+			p_->b_lvl = r_["b_lvl"].get<int>();
+			p_->i_11818_1 = r_["i_11818_1"].get<uint8_t>();
+			p_->i_11818_2 = r_["i_11818_2"].get<uint8_t>();
+			p_->roleSkin = r_["roleSkin"].get<uint8_t>();
+			p_->roleIcon = r_["roleIcon"].get<uint8_t>();
+			p_->radio = r_["rad"].get<uint8_t>();
+			p_->w_w = r_["w_w"].get<uint8_t>();
+			//p_->egg = (!(r_.find("egg") != r_.end()) ? p_->egg : r_["egg"].get<int>());
+			p_->lvl125 = r_["lvl125"].get<uint8_t>();
+			p_->donor = r_["dnr"].get<uint8_t>();
+			p_->master = r_["mst"].get<uint8_t>();
+			p_->all_in = r_["al"].get<uint8_t>();
+
+			p_->radio2 =  r_["radio2"].get<bool>();
+			p_->received_balloon_warz = r_["balloon_prize"].get<bool>();//2022-11-15
+			p_->pure_shadow = r_["p_7"].get<int>(); //2022-10/06
+
+			if (!(r_.find("on") == r_.end())) {
+				p_->p_status = r_["on"].get<int>(); //2023-4/06
+			}
+			if (!(r_.find("tmod") == r_.end())) {
+				p_->tmod = r_["tmod"].get<bool>(); //2023-4/06
+			}
+			if (!(r_.find("rtg") == r_.end())) {
+				p_->real_growtopia_name = r_["rtg"].get<string>(); //2023-4/06
+			}
+			p_->grow_air_ballon = (!(r_.find("g_a_b") != r_.end()) ? p_->grow_air_ballon : r_["g_a_b"].get<uint8_t>());
+			if (!(r_.find("egg") == r_.end())) {
+				p_->egg_carton = r_["egg"].get<int>(); //2023-04-07
+				p_->magic_egg = r_["egg2"].get<int>(); //2023-04-07
+			}
+			// Banner Bandolier
+			p_->Banner_Item = (!(r_.find("Banner_Item") != r_.end()) ? p_->Banner_Item : r_["Banner_Item"].get<int>());
+			p_->Banner_Flag = (!(r_.find("Banner_Flag") != r_.end()) ? p_->Banner_Flag : r_["Banner_Flag"].get<int>());
+			// Crown of Season
+			p_->Aura_Season = (!(r_.find("Aura_Season") != r_.end()) ? p_->Aura_Season : r_["Aura_Season"].get<int>());
+			p_->Trail_Season = (!(r_.find("Trail_Season") != r_.end()) ? p_->Trail_Season : r_["Trail_Season"].get<int>());
+			// Infinity Crown
+			p_->Crown_Time_Change = (!(r_.find("Crown_Time_Change") != r_.end()) ? p_->Crown_Time_Change : r_["Crown_Time_Change"].get<bool>());
+			p_->Crown_Cycle_Time = (!(r_.find("Crown_Cycle_Time") != r_.end()) ? p_->Crown_Cycle_Time : r_["Crown_Cycle_Time"].get<int>());
+			p_->Base_R_0 = (!(r_.find("Base_R_0") != r_.end()) ? p_->Base_R_0 : r_["Base_R_0"].get<int>());
+			p_->Base_G_0 = (!(r_.find("Base_G_0") != r_.end()) ? p_->Base_G_0 : r_["Base_G_0"].get<int>());
+			p_->Base_B_0 = (!(r_.find("Base_B_0") != r_.end()) ? p_->Base_B_0 : r_["Base_B_0"].get<int>());
+			p_->Gem_R_0 = (!(r_.find("Gem_R_0") != r_.end()) ? p_->Gem_R_0 : r_["Gem_R_0"].get<int>());
+			p_->Gem_G_0 = (!(r_.find("Gem_G_0") != r_.end()) ? p_->Gem_G_0 : r_["Gem_G_0"].get<int>());
+			p_->Gem_B_0 = (!(r_.find("Gem_B_0") != r_.end()) ? p_->Gem_B_0 : r_["Gem_B_0"].get<int>());
+			p_->Crystal_R_0 = (!(r_.find("Crystal_R_0") != r_.end()) ? p_->Crystal_R_0 : r_["Crystal_R_0"].get<int>());
+			p_->Crystal_G_0 = (!(r_.find("Crystal_G_0") != r_.end()) ? p_->Crystal_G_0 : r_["Crystal_G_0"].get<int>());
+			p_->Crystal_B_0 = (!(r_.find("Crystal_B_0") != r_.end()) ? p_->Crystal_B_0 : r_["Crystal_B_0"].get<int>());
+			p_->Crown_Floating_Effect_0 = (!(r_.find("Crown_Floating_Effect_0") != r_.end()) ? p_->Crown_Floating_Effect_0 : r_["Crown_Floating_Effect_0"].get<bool>());
+			p_->Crown_Laser_Beam_0 = (!(r_.find("Crown_Laser_Beam_0") != r_.end()) ? p_->Crown_Laser_Beam_0 : r_["Crown_Laser_Beam_0"].get<bool>());
+			p_->Crown_Crystals_0 = (!(r_.find("Crown_Crystals_0") != r_.end()) ? p_->Crown_Crystals_0 : r_["Crown_Crystals_0"].get<bool>());
+			p_->Crown_Rays_0 = (!(r_.find("Crown_Rays_0") != r_.end()) ? p_->Crown_Rays_0 : r_["Crown_Rays_0"].get<bool>());
+			p_->Base_R_1 = (!(r_.find("Base_R_1") != r_.end()) ? p_->Base_R_1 : r_["Base_R_1"].get<int>());
+			p_->Base_G_1 = (!(r_.find("Base_G_1") != r_.end()) ? p_->Base_G_1 : r_["Base_G_1"].get<int>());
+			p_->Base_B_1 = (!(r_.find("Base_B_1") != r_.end()) ? p_->Base_B_1 : r_["Base_B_1"].get<int>());
+			p_->Gem_R_1 = (!(r_.find("Gem_R_1") != r_.end()) ? p_->Gem_R_1 : r_["Gem_R_1"].get<int>());
+			p_->Gem_G_1 = (!(r_.find("Gem_G_1") != r_.end()) ? p_->Gem_G_1 : r_["Gem_G_1"].get<int>());
+			p_->Gem_B_1 = (!(r_.find("Gem_B_1") != r_.end()) ? p_->Gem_B_1 : r_["Gem_B_1"].get<int>());
+			p_->Crystal_R_1 = (!(r_.find("Crystal_R_1") != r_.end()) ? p_->Crystal_R_1 : r_["Crystal_R_1"].get<int>());
+			p_->Crystal_G_1 = (!(r_.find("Crystal_G_1") != r_.end()) ? p_->Crystal_G_1 : r_["Crystal_G_1"].get<int>());
+			p_->Crystal_B_1 = (!(r_.find("Crystal_B_1") != r_.end()) ? p_->Crystal_B_1 : r_["Crystal_B_1"].get<int>());
+			p_->Crown_Floating_Effect_1 = (!(r_.find("Crown_Floating_Effect_1") != r_.end()) ? p_->Crown_Floating_Effect_1 : r_["Crown_Floating_Effect_1"].get<bool>());
+			p_->Crown_Laser_Beam_1 = (!(r_.find("Crown_Laser_Beam_1") != r_.end()) ? p_->Crown_Laser_Beam_1 : r_["Crown_Laser_Beam_1"].get<bool>());
+			p_->Crown_Crystals_1 = (!(r_.find("Crown_Crystals_1") != r_.end()) ? p_->Crown_Crystals_1 : r_["Crown_Crystals_1"].get<bool>());
+			p_->Crown_Rays_1 = (!(r_.find("Crown_Rays_1") != r_.end()) ? p_->Crown_Rays_1 : r_["Crown_Rays_1"].get<bool>());
+			p_->Crown_Value = (!(r_.find("Crown_Value") != r_.end()) ? p_->Crown_Value : r_["Crown_Value"].get<int>());
+			p_->Crown_Value_0_0 = (!(r_.find("Crown_Value_0_0") != r_.end()) ? p_->Crown_Value_0_0 : r_["Crown_Value_0_0"].get<long long int>());
+			p_->Crown_Value_0_1 = (!(r_.find("Crown_Value_0_1") != r_.end()) ? p_->Crown_Value_0_1 : r_["Crown_Value_0_1"].get<long long int>());
+			p_->Crown_Value_0_2 = (!(r_.find("Crown_Value_0_2") != r_.end()) ? p_->Crown_Value_0_2 : r_["Crown_Value_0_2"].get<long long int>());
+			p_->Crown_Value_1_0 = (!(r_.find("Crown_Value_1_0") != r_.end()) ? p_->Crown_Value_1_0 : r_["Crown_Value_1_0"].get<long long int>());
+			p_->Crown_Value_1_1 = (!(r_.find("Crown_Value_1_1") != r_.end()) ? p_->Crown_Value_1_1 : r_["Crown_Value_1_1"].get<long long int>());
+			p_->Crown_Value_1_2 = (!(r_.find("Crown_Value_1_2") != r_.end()) ? p_->Crown_Value_1_2 : r_["Crown_Value_1_2"].get<long long int>());
+			// Crown of Season
+			// Magic Magnet
+			p_->Magnet_Item = (!(r_.find("mg") != r_.end()) ? p_->Magnet_Item : r_["mg"].get<int>());
+
+			p_->carnival_credit = (!(r_.find("ca_c") != r_.end()) ? p_->carnival_credit : r_["ca_c"].get<int>());
+			p_->C_QuestActive = (!(r_.find("CQuest") != r_.end()) ? p_->C_QuestActive : r_["CQuest"].get<bool>());
+			p_->C_DeliverID = (!(r_.find("CQItem") != r_.end()) ? p_->C_DeliverID : r_["CQItem"].get<int>());
+			p_->C_QuestProgress = (!(r_.find("CQProg") != r_.end()) ? p_->C_QuestProgress : r_["CQProg"].get<int>());
+			p_->C_QuestKind = (!(r_.find("CQKind") != r_.end()) ? p_->C_QuestKind : r_["CQKind"].get<int>());
+			p_->C_ProgressNeeded = (!(r_.find("CQNeed") != r_.end()) ? p_->C_ProgressNeeded : r_["CQNeed"].get<int>());
+			p_->C_QuestStep = (!(r_.find("CQStep") != r_.end()) ? p_->C_QuestStep : r_["CQStep"].get<int>());
+			if (!(r_.find("participated") == r_.end())) {
+				p_->participated = r_["participated"].get<int>(); //2023-03-29
+			}
+
+			if (!(r_.find("bc") == r_.end())) {
+				p_->black_color = r_["bc"].get<bool>(); //2023-03-10
+			}
+			if (!(r_.find("logger") == r_.end())) {
+				p_->logger = r_["logger"].get<bool>(); //2023-03-10
+			}
+			if (!(r_.find("lr") == r_.end())) {
+				p_->last_rated = r_["lr"].get<vector<string>>();
+			}
+
+			if (!(r_.find("sc") == r_.end())) {
+				p_->skin_c = r_["sc"].get<string>();
+				p_->autofarm_slot = r_["as"].get<int>();
+			}
+
+
+			if (!(r_.find("is_legend") == r_.end())) {
+				p_->is_legend = r_["is_legend"].get<bool>(); //2023-03-20
+			}
+
+			if (!(r_.find("lw_1") == r_.end())) {
+				p_->lwiz_quest = r_["lw_1"].get<int>();
+				p_->lwiz_step = r_["lw_2"].get<int>();
+				p_->lwiz_notification = r_["lw_3"].get<int>();
+				p_->legendary_quest = r_["lw_4"].get<vector<vector<int>>>();
+			}
+			if (!(r_.find("set") == r_.end())) {
+				p_->set = r_["set"].get<vector<vector<int>>>();
+			}
+			if (!(r_.find("ig") == r_.end())) {
+				p_->ignored = r_["ig"].get<vector<string>>();
+			}
+
+			if (!(r_.find("mlb") == r_.end())) {
+				p_->mailbox = r_["mlb"].get<int>(); //2023-02/02
+				p_->total_credit_card = r_["ccd"].get<int>(); //2023-02/03
+				p_->credit_card = r_["ccd2"].get<int>(); //2023-02/03
+				p_->moderator = r_["mod2"].get<int>(); //2023-02/03
+ 			}
+			if (p_->moderator == 1) p_->mod = 1;
+
+
+
+			//if (!(r_.find("blabo") == r_.end())) p_->black_box_consumed = r_["blabo"].get<int>(); //2022-11/25
+			if (!(r_.find("playtime_items") == r_.end())) p_->playtime_items = r_["playtime_items"].get<vector<int>>(); //2023-01-16
+
+			p_->drtitle = r_["drtt"].get<uint8_t>();
+			p_->drlegend = r_["drll"].get<uint8_t>();
+			p_->su_8552_1 = r_["su1"].get<uint16_t>();
+			p_->su_8552_2 = r_["su2"].get<uint16_t>();
+			p_->su_8552_3 = r_["su3"].get<uint16_t>();
+			p_->mercy = r_["mer"].get<uint8_t>();
+			p_->drt = r_["_drt"].get<uint8_t>();
+
+			/*
+			p_->pinata_day = (!(r_.find("p_d1") != r_.end()) ? p_->pinata_day : r_["p_d1"].get<int>());
+			p_->pinata_prize = (!(r_.find("p_d2") != r_.end()) ? p_->pinata_prize : r_["p_d2"].get<bool>());
+			p_->pinata_claimed = (!(r_.find("p_d3") != r_.end()) ? p_->pinata_claimed : r_["p_d3"].get<bool>());
+			*/
+
+			//p_->halloween_dark_king = (!(r_.find("smp") != r_.end()) ? 0 : r_["smp"].get<uint8_t>());
+			p_->growtoken_worlds = (!(r_.find("gr_w") != r_.end()) ? p_->growtoken_worlds : r_["gr_w"].get<vector<string>>());
+
+			p_->grow4good_gems = r_["g4g_7"].get<int>();
+			p_->grow4good_surgery = r_["g4g_9"].get<int>();
+
+		
+			p_->grow4good_fish = r_["g4g_10"].get<int>();
+			p_->grow4good_points =r_["g4g_11"].get<int>();
+			p_->grow4good_30mins = r_["g4g_12"].get<uint8_t>();
+			p_->grow4good_break = r_["g4g_14"].get<int>();
+			p_->grow4good_place = r_["g4g_15"].get<int>();
+			p_->grow4good_trade = r_["g4g_16"].get<int>();
+			p_->grow4good_sb =r_["g4g_17"].get<int>();
+			p_->grow4good_enter =r_["g4g_18"].get<bool>();
+			p_->grow4good_provider =r_["g4g_19"].get<int>();
+			p_->grow4good_provider2 =  r_["g4g_20"].get<int>();
+			p_->grow4good_geiger = r_["g4g_21"].get<int>();
+			p_->grow4good_geiger2 =r_["g4g_22"].get<int>();
+
+			p_->cheater_ =r_["cheater"].get<int>();
+			p_->support101_ =  r_["support101"].get<int>();
+			p_->cheater_settings = (!(r_.find("c_s") != r_.end()) ? p_->cheater_settings : r_["c_s"].get<int>());
+
+			//p_->growtoken_worlds = (!(r_.find("gr_w") != r_.end()) ? p_->growtoken_worlds : r_["gr_w"].get<vector<string>>());
+
+			// 2023
+			if (!(r_.find("g4g_1_2023") != r_.end())) {
+				struct tm newtime;
+				time_t now = time(0);
+				localtime_s(&newtime, &now);
+				p_->grow4good_week = newtime.tm_yday;
+				p_->grow4good_month = newtime.tm_yday;
+			}
+			else {
+				p_->grow4good_week = r_["g4g_23_2023"].get<uint16_t>();
+				p_->grow4good_month = r_["g4g_27_2023"].get<uint16_t>();
+			}
+
+			/*
+			if (!(r_.find("h_1") == r_.end())) {
+				p_->halloween_task_1 = r_["h_1"].get<int>();
+				p_->halloween_task_2 = r_["h_2"].get<int>();
+				p_->halloween_task_3 = r_["h_3"].get<int>();
+				p_->halloween_task_4 = r_["h_4"].get<int>();
+			}
+
+			if (!(r_.find(to_string(halloween_quest)+ "1") == r_.end())) {
+				p_->halloween_ptask_1 = r_[to_string(halloween_quest) + "1"].get<int>();
+				p_->halloween_ptask_2 = r_[to_string(halloween_quest) + "2"].get<int>();
+				p_->halloween_ptask_3 = r_[to_string(halloween_quest) + "3"].get<int>();
+				p_->halloween_ptask_4 = r_[to_string(halloween_quest) + "4"].get<int>();
+				p_->halloween_ptask_5 = r_[to_string(halloween_quest) + "5"].get<int>();
+			}
+			*/
+
+
+			if (!(r_.find("h1") == r_.end())) {
+				p_->won_hider = r_["h1"].get<int>();
+				p_->won_seeker = r_["h2"].get<int>();
+			}
+
+			if (!(r_.find("vou") == r_.end())) {
+				p_->voucher = r_["vou"].get<int>();
+			}
+			if (!(r_.find("ch_55") == r_.end())) {
+				p_->chat_prefix = r_["ch_55"].get<string>();
+			}
+
+			if (!(r_.find("ri_1") == r_.end())) {
+				p_->cape_t = r_["ri_1"].get<int>();
+				p_->cape_c = r_["ri_2"].get<int>();
+				p_->cape_t2 = r_["ri_3"].get<int>();
+				p_->cape_c2 = r_["ri_4"].get<int>();
+				p_->flags = r_["ri_5"].get<int>();
+				if (p_->flags == 0) p_->flags = 19451;
+				p_->TimeDilation = r_["ri_6"].get<int>();
+				p_->CapeStyleColor_1 = r_["ri_7"].get<string>();
+				p_->CapeStyleColor_2 = r_["ri_8"].get<string>();
+				p_->CapeCollarColor_1 = r_["ri_9"].get<string>();
+				p_->CapeCollarColor_2 = r_["ri_10"].get<string>();
+			}
+
+			if (!(r_.find("rw_1") == r_.end())) {
+				p_->wings_t = r_["rw_1"].get<int>();
+				p_->wings_c = r_["rw_2"].get<int>();
+				p_->wings_t2 = r_["rw_3"].get<int>();
+				p_->wings_c2 = r_["rw_4"].get<int>();
+				p_->_flags = r_["rw_5"].get<int>();
+				p_->_TimeDilation = r_["rw_6"].get<int>();
+				p_->_CapeStyleColor_1 = r_["rw_7"].get<string>();
+				p_->_CapeStyleColor_2 = r_["rw_8"].get<string>();
+				p_->_CapeCollarColor_1 = r_["rw_9"].get<string>();
+				p_->_CapeCollarColor_2 = r_["rw_10"].get<string>();
+			}
+
+
+			/*
+			if (!(r_.find("w_t_d") == r_.end())) {
+				p_->winterfest_task_day = r_["w_t_d"].get<int>();
+				p_->winterfest_wishes = r_["w_t_w"].get<int>();
+				p_->winterfest_quest_1 = r_["w_t_q1"].get<int>();
+				p_->winterfest_quest_2 = r_["w_t_q2"].get<int>();
+				p_->winterfest_quest_3 = r_["w_t_q3"].get<int>();
+
+				p_->reset_winterfest_quest_1 = r_["w_t_rq1"].get<int>();
+				p_->reset_winterfest_quest_2 = r_["w_t_rq2"].get<int>();
+				p_->reset_winterfest_quest_3 = r_["w_t_rq3"].get<int>();
+				p_->reset_winterfest_quest_4 = r_["w_t_rq4"].get<int>();
+				p_->reset_winterfest_quest_5 = r_["w_t_rq5"].get<int>();
+				p_->reset_winterfest_quest_6 = r_["w_t_rq6"].get<int>();
+				p_->reset_winterfest_quest_7 = r_["w_t_rq7"].get<int>();
+				p_->reset_winterfest_quest_8 = r_["w_t_rq8"].get<int>();
+				p_->winterfest_stuff4toys = r_["w_t_st"].get<int>();
+
+			}
+
+			if (!(r_.find("got_4292") == r_.end())) {
+				p_->got_4292 = r_["got_4292"].get<int>();
+				p_->got_4286 = r_["got_4286"].get<int>();
+				p_->got_4288 = r_["got_4288"].get<int>();
+				p_->got_10500 = r_["got_10500"].get<int>();
+			}*/
+			if (!(r_.find("bb_1") == r_.end())) {
+				p_->balloon_faction = r_["bb_1"].get<int>();
+				p_->balloon_hit = r_["bb_2"].get<int>();
+				p_->hit_by = r_["bb_3"].get<int>();
+				p_->balloon_donated = r_["bb_4"].get<int>();
+				p_->balloon_score = r_["bb_5"].get<int>();
+			}
+			p_->bans = r_["7bans"].get<vector<string>>();
+
+			if (!(r_.find("ch") == r_.end())) {
+				p_->crypto_history = r_["ch"].get<vector<string>>();
+			}
+
+			p_->minokawa_wings = r_["12640"].get<uint8_t>();
+			p_->panda_spirit = r_["12872"].get<uint8_t>();
+
+			if (!(r_.find("11506") == r_.end())) {
+				p_->mask_dragon = r_["11506"].get<uint8_t>();
+				p_->growformer = r_["7384"].get<uint8_t>();
+			}
+			p_->eq_aura = r_["12634"].get<uint16_t>();
+
+			p_->fa_ip = r_["fa_ip"].get<string>();
+
+			p_->gender = r_["gender"].get<string>();
+
+			p_->fa2 = r_["2fa"].get<int>();
+			if (p_->fa2 <= 999) p_->fa2 = 0;
+			//if (!(r_.find("garuda") == r_.end())) p_->garuda = r_["garuda"].get<uint8_t>();
+			p_->growmoji = r_["grm"].get<string>();
+
+			p_->mini_you = r_["myou"].get<bool>();
+			p_->display_age = r_["p_1"].get<bool>();
+			p_->display_home = r_["p_2"].get<bool>();
+			p_->ownership_role = r_["owner"].get<bool>();
+
+				p_->buy_role = r_["/buy"].get<bool>();
+				p_->ghost_role = r_["/ghost"].get<bool>();
+				p_->nick_role = r_["/nick"].get<bool>();
+				p_->give_role = r_["/give"].get<bool>();
+				if (!(r_.find("/edit") == r_.end())) p_->give_editor = r_["/edit"].get<bool>();
+			p_->fires = r_["fire"].get<int>();
+			p_->grow4good_seed = r_["g4g_24"].get<uint16_t>();
+			p_->grow4good_seed2 = r_["g4g_25"].get<uint8_t>();
+			p_->grow4good_combine = r_["g4g_26"].get<uint8_t>();
+			p_->grow4good_crystal = r_["g4g_28"].get<uint8_t>();
+			p_->grow4good_honors = r_["g4g_29"].get<uint8_t>();
+
+
+			p_->hair_color = r_["e_1"].get<uint32_t>();
+			p_->eye_drop = r_["e_2"].get<uint32_t>();
+			p_->eye_lenses = r_["e_3"].get<uint32_t>();
+
+			if (!(r_.find("cry") == r_.end())) p_->crypto = r_["cry"].get<vector<pair<string, int>>>();
+
+
+			//p_->carnival_credit = (!(r_.find("cnv_1") != r_.end()) ? p_->carnival_credit : r_["cnv_1"].get<int>());
+			p_->pearl = r_["bea_1"].get<int>();
+			p_->sprite = r_["spr"].get<uint8_t>();
+			p_->wild = r_["spr2"].get<uint8_t>();
+			p_->golem = (!(r_.find("spr3") != r_.end()) ? p_->golem : r_["spr3"].get<uint8_t>());
+
+			p_->tankIDName = r_["name"].get<string>();
+			p_->email = r_["email"].get<string>();
+			p_->b_r = r_["b_r"].get<string>();
+			p_->b_b = r_["b_b"].get<string>();
+			p_->b_s = r_["b_s"].get<long long int>();
+			p_->b_t = r_["b_t"].get<long long int>();
+			p_->m_b = r_["m_b"].get<string>();
+			p_->punch_count = r_["punch"].get<long long int>();
+			p_->n = r_["n"].get<uint8_t>();
+			p_->ghost = r_["ghost"].get<bool>();
+			p_->invis = r_["invis"].get<bool>();
+			p_->dev = r_["dev"].get<uint8_t>();
+			p_->m_h = r_["m_h"].get<uint8_t>();
+			p_->gems = r_["gems"].get<int>();
+			p_->xp = r_["xp"].get<long long int>();
+			p_->level = r_["level"].get<int>();
+			p_->skin = r_["skin"].get<int>();
+			p_->show_location_ = r_["show_location"].get<bool>();
+			p_->show_friend_notifications_ = r_["show_notifications"].get<bool>();
+			p_->playtime = time(NULL), p_->seconds = r_["playtime"].get<long long int>();
+			p_->account_created = r_["date"].get<long long int>();
+			if (p_->account_created == 0) p_->account_created = time(NULL) / 86400;
+			p_->home_world = r_["home_world"].get<string>();
+			p_->hair = r_["hair"].get<uint16_t>();
+			p_->shirt = r_["shirt"].get<uint16_t>();
+			p_->pants = r_["pants"].get<uint16_t>();
+			p_->feet = r_["feet"].get<uint16_t>();
+			p_->face = r_["face"].get<uint16_t>();
+			p_->hand = r_["hand"].get<uint16_t>();
+			p_->back = r_["back"].get<uint16_t>();
+			p_->mask = r_["mask"].get<uint16_t>();
+			p_->necklace = r_["necklace"].get<uint16_t>();
+			p_->ances = r_["ances"].get<uint16_t>();
+			if (r_.find(guild_name_player) != r_.end()) p_->guild_id = r_[guild_name_player].get<int>();
+			p_->geiger_ = r_["geiger"].get<uint8_t>();
+			p_->booty_broken = r_["booty_broken"].get<int>();
+
+
+
+			if (!(r_.find("trans") == r_.end())) {
+				p_->transmute = r_["trans"].get<vector<pair<int, int>>>(); //2023-02/01
+			}
+
+			if (r_.find("playmods") != r_.end()) {
+				json list_playmod = r_["playmods"].get<json>();
+				for (int i_ = 0; i_ < list_playmod.size(); i_++) {
+					PlayMods give_playmod{};
+					give_playmod.id = list_playmod[i_]["id"].get<uint16_t>();
+					if (give_playmod.id == 129 || give_playmod.id == 130 || give_playmod.id == 131 || give_playmod.id == 132 || give_playmod.id == 133) p_->subscriber = true;
+					give_playmod.time = list_playmod[i_]["time"].get<long long>();
+					if (list_playmod[i_].find("user") != list_playmod[i_].end()) {
+						give_playmod.user = list_playmod[i_]["user"].get<string>();
+					}
+					p_->playmods.push_back(give_playmod);
+				}
+			}
+			if (p_->dev || p_->superdev || has_playmod2(p_, 125)) p_->mod = 1;
+			if (has_playmod2(p_, 126)) p_->vip = 1;
+			if (r_.find("blarney") != r_.end()) {
+				json list_blarney = r_["blarney"].get<json>();
+				for (int i_ = 0; i_ < list_blarney.size(); i_++) {
+					int w_ = list_blarney[i_]["world"].get<int>();
+					long long tim_ = list_blarney[i_]["time"].get<long long>();
+					for (int c_ = 0; c_ < p_->completed_blarneys.size(); c_++) {
+						if ((int)p_->completed_blarneys[c_][0] == w_) {
+							p_->completed_blarneys[c_][1] = tim_;
+							break;
+						}
+					}
+				}
+			}
+		}
+		catch (exception) {
+			return -1;
+		}
+		if (pInfo(peer)->ghost or pInfo(peer)->invis) {
+			if (not pInfo(peer)->mod and not pInfo(peer)->dev) {
+				pInfo(peer)->invis = false;
+			}
+			if (not pInfo(peer)->dev) {
+				pInfo(peer)->ghost = false;
+				if (pInfo(peer)->skin == -2450) pInfo(peer)->skin = 0x8295C3FF;
+			}
+		}
+		if (pInfo(peer)->b_s == 0) {
+			if (pInfo(peer)->supp == 2) {
+				/*gamepacket_t p;
+				p.Insert("OnOverrideGDPRFromServer");
+				p.Insert(39);
+				p.Insert(1);
+				p.Insert(0);
+				p.Insert(1);
+				p.CreatePacket(peer);*/
+				{
+					gamepacket_t p;
+					p.Insert("OnSetRoleSkinsAndTitles");
+					// pirmas - farmer
+					// antras - builder
+					// trecias - surgeon
+					// ketvirtas - fisherman
+					// penktas - chef
+					// sestas - starcaptain
+					string a = (pInfo(peer)->bb_lvl >= 50 ? "1" : "0");
+					string a1 = (pInfo(peer)->bb_lvl >= 50 ? "2" : "0");
+					string farm_set_skins = (pInfo(peer)->t_lvl >= 50 ? "1" : "0") + a + (pInfo(peer)->s_lvl >= 50 ? "1" : "0") + (pInfo(peer)->ff_lvl >= 50 ? "1" : "0");
+					string farm_set_titles = (pInfo(peer)->t_lvl >= 50 ? "2" : "0") + a1 + (pInfo(peer)->s_lvl >= 50 ? "2" : "0") + (pInfo(peer)->ff_lvl >= 50 ? "2" : "0");
+					p.Insert(farm_set_skins + "00");
+					p.Insert(farm_set_titles + "00");
+					p.CreatePacket(peer);
+				}
+			}
+			if (pInfo(peer)->gp == 1) {
+				gamepacket_t p;
+				p.Insert("OnPaw2018SkinColor1Changed");
+				p.Insert(1);
+				p.CreatePacket(peer);
+				{
+					gamepacket_t p;
+					p.Insert("OnPaw2018SkinColor2Changed");
+					p.Insert(1);
+					p.CreatePacket(peer);
+				}
+			}
+				OnSetGems(peer);
+				{
+					gamepacket_t p;
+					p.Insert("OnMagicCompassTrackingItemIDChanged");
+					p.Insert(pInfo(peer)->Magnet_Item);
+					p.CreatePacket(peer);
+				}
+			{
+				gamepacket_t p2;
+				p2.Insert("SetHasAccountSecured"), p2.Insert(1), p2.CreatePacket(peer);
+			}
+			gamepacket_t p;
+			p.Insert("SetHasGrowID"), p.Insert(1), p.Insert(p_->tankIDName), p.Insert(p_->tankIDPass), p.CreatePacket(peer);
+			int jau_turi = 0;
+			modify_inventory(peer, 6336, jau_turi);
+			if (jau_turi == 0) modify_inventory(peer, 6336, jau_turi=1);
+		}
+		return 0;
+	}
+	return -1;
+}
